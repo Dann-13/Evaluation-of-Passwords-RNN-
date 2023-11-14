@@ -12,7 +12,7 @@ from IPython.display import display
 # Carga el archivo CSV en un DataFrame
 # Especificamos las columnas que necesitamos en este caso para el dataset son las columnas 0 y 1, a su vez solo cargaremos 2000
 #registros del dataset
-df = pd.read_csv('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data.csv', usecols=[0, 1], nrows=2000)
+df = pd.read_csv('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/data.csv', usecols=[0, 1], nrows=2000)
 # Visualizamos de manera intuitiva el dataset
 display(df)
 
@@ -53,4 +53,4 @@ etiquetas = etiquetas.astype(int)
 model.fit(X_entrenamiento, etiquetas, epochs=10, batch_size=1)
 
 # Guardamos el modelo entrenado para usarlo despues
-model.save('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/modelo_RNN.h5')
+model.save('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/modelo_RNN.h5')
