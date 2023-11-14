@@ -1,3 +1,5 @@
+
+#Este algoritmo carga los datos csv y entrena el algortimo RNN, guradando este algortimo ya entrenado en la misma carpeta data
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Embedding, LSTM, Dense
