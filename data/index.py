@@ -59,6 +59,10 @@ etiquetas = etiquetas.astype(int)
 # el modelo aprenda a categorizar contraseñas en 3 categorias
 model.fit(X_entrenamiento, etiquetas, epochs=10, batch_size=1)
 
+# Obtener la longitud máxima de las secuencias después de la tokenización
+longitud_maxima = X_entrenamiento.shape[1]
+print(f"Longitud máxima de las secuencias: {longitud_maxima}")
+
 # Guardamos el modelo entrenado para usarlo despues
 model.save('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/modelo_RNN.h5')
 
