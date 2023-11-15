@@ -25,6 +25,11 @@ tokenizer = Tokenizer(char_level=True)
 #Ajustamos el Tokenizer a las contraseñas de la columna 'password' del DataFrame. Durante este proceso,
 # el tokenizer aprende el vocabulario de caracteres presentes en todas las contraseñas.
 tokenizer.fit_on_texts(df['password'])
+
+# Guardar el tokenizer como un archivo JSON
+tokenizer_json = tokenizer.to_json()
+with open('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/tokenizer.json', 'w') as json_file:
+    json_file.write(tokenizer_json)
 # Convierte las contraseñas en secuencias de números enteros. Cada número entero representa un carácter
 # en el vocabulario aprendido por el tokenizer.
 X_entrenamiento = tokenizer.texts_to_sequences(df['password'])
@@ -56,3 +61,28 @@ model.fit(X_entrenamiento, etiquetas, epochs=10, batch_size=1)
 
 # Guardamos el modelo entrenado para usarlo despues
 model.save('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/modelo_RNN.h5')
+
+# Cargar el modelo desde Colab
+modelo_cargado = load_model('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/modelo_RNN.h5')
+
+# Contraseña de prueba
+contrasena_prueba = "Sebas"
+
+# Tokenización de la contraseña de prueba
+contrasena_prueba_seq = tokenizer.texts_to_sequences([contrasena_prueba])
+contrasena_prueba_seq = pad_sequences(contrasena_prueba_seq, maxlen=X_entrenamiento.shape[1])
+
+# Realizar la predicción utilizando el modelo cargado
+prediccion = modelo_cargado.predict(contrasena_prueba_seq)
+
+
+# Obtener la clasificación numérica
+clasificacion_numerica = np.argmax(prediccion, axis=1)
+
+# Obtener la probabilidad de cada clase
+probabilidades = prediccion[0]
+
+# Imprimir la clasificación numérica y las probabilidades
+print(f"Clasificación numérica de la contraseña: {clasificacion_numerica[0]}")
+print(f"Probabilidades de cada clase (Débil, Segura, Bastante Segura): {probabilidades}")
+
