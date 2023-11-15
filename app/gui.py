@@ -1,4 +1,6 @@
 import tkinter as tk
+import os
+from PIL import Image, ImageTk
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -6,6 +8,10 @@ from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 class AppGUI:
     def __init__(self):
+        #Cargando directorio de las carpeta imagenes
+        carpeta_principal = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        carpeta_imagenes = os.path.join(carpeta_principal, "images")
+        
          # Cargar el modelo entrenado
         self.modelo_cargado = load_model('/home/dan-dev/Documents/Proyectos_Personales/Proyects_Python/ProyectoIAContraseñas/data/modelo_RNN.h5')
 
@@ -14,6 +20,7 @@ class AppGUI:
         self.tokenizer = tokenizer_from_json(tokenizer_json)
         
         self.root = tk.Tk()
+        
         self.root.title("Mi Aplicación")
         self.root.geometry("900x500")
         # Aquí puedes agregar widgets y configuraciones de la interfaz gráfica
@@ -26,19 +33,18 @@ class AppGUI:
         left_frame = tk.Frame(frame)
         left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         #contenedor lado izquierdo
-        left_cotainer = tk.Frame(left_frame)
-        left_cotainer.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        left_container = tk.Frame(left_frame, width=450, height=500, bg="#0E1833")
+        left_container.pack_propagate(False)
+        left_container.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
         
-        # Etiqueta y entrada para ingresar la contraseña
-        self.etiqueta_contraseña = tk.Label(left_cotainer, text="Texto descriptivo")
-        self.etiqueta_contraseña.grid(row=0, column=0, pady=10)
 
         # Lado derecho (rojo)
-        right_frame = tk.Frame(frame, bg="red")
+        right_frame = tk.Frame(frame, bg="white")
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         # Contenedor para elementos en el lado derecho
-        right_container = tk.Frame(right_frame, bg="red")
+        right_container = tk.Frame(right_frame, bg="white", width=450, height=500)
         right_container.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Etiqueta y entrada para ingresar la contraseña
