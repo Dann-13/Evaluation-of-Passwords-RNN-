@@ -23,7 +23,6 @@ class AppGUI:
         
         self.root.title("Evaluador de Contraseñas")
         self.root.geometry("900x500")
-        # Aquí puedes agregar widgets y configuraciones de la interfaz gráfica
         
         # Crear un marco principal para dividir la ventana
         frame = tk.Frame(self.root)
@@ -36,9 +35,31 @@ class AppGUI:
         left_container = tk.Frame(left_frame, width=450, height=500, bg="#0E1833")
         left_container.pack_propagate(False)
         left_container.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
+        #Imagen
+        # Ruta de tu archivo PNG con fondo transparente
+        imagen_path = os.path.join(carpeta_imagenes, "img2.png")
+
+        # Cargar el PNG con fondo transparente usando Image de PIL
+        imagen_original = Image.open(imagen_path)
+        # Cambiar el tamaño de la imagen según sea necesario
+        imagen_resized = imagen_original.resize((250, 250), Image.ANTIALIAS)
+        # Convertir la imagen a PhotoImage
+        self.imagen_nieve = ImageTk.PhotoImage(imagen_resized)
+        # Crear un Canvas y colocar la imagen en él
+        self.canvas = tk.Canvas(left_container, width=250, height=250, bg="#0E1833", highlightthickness=0)
+        self.canvas.pack()
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.imagen_nieve)
+        
+        self.etiqueta_contraseña = tk.Label(left_container, 
+                                    text="Para garantizar la seguridad de tu contraseña, es recomendable que tenga entre 8 y 12 caracteres y combine letras, números y, opcionalmente, caracteres especiales. Evita patrones predecibles, secuencias comunes y repeticiones consecutivas de caracteres. Una contraseña segura es aquella que es única, compleja y difícil de adivinar para otros", 
+                                    bg="#0E1833",
+                                    foreground="white",
+                                    wraplength=350)  # Ajusta el valor de wraplength según sea necesario
+        self.etiqueta_contraseña.place(x=50, y=250)  # Ajusta las coordenadas según tus necesidades
 
         
-
+        
         # Lado derecho (rojo)
         right_frame = tk.Frame(frame, bg="white")
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
@@ -99,10 +120,14 @@ class AppGUI:
         self.resultado_texto.delete(1.0, tk.END)  # Limpiar el contenido anterior
         self.resultado_texto.insert(tk.END, resultado)
         self.resultado_texto.config(state=tk.DISABLED)  # Deshabilitar la edición del widget de texto
+    def animate(self):
+        # Si el GIF es animado, este método se llama para avanzar la animación
+        # Si no es un GIF animado, puedes omitir esta función
+        self.label_gif.after(50, self.animate)
 
 
     def on_closing(self):
-        # Puedes agregar limpieza adicional aquí si es necesario
+        # Aseguramos que efectivamente estasmos cerrando la aplicacion
         self.root.quit()
         
     def run(self):
