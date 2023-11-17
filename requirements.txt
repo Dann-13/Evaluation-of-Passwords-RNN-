@@ -67,3 +67,4 @@ Werkzeug==3.0.1
 wheel==0.41.2
 wrapt==1.14.1
 tk==8.6
+matplotlib==3.8.1

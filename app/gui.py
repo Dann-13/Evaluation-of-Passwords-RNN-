@@ -21,7 +21,7 @@ class AppGUI:
         
         self.root = tk.Tk()
         
-        self.root.title("Mi Aplicación")
+        self.root.title("Evaluador de Contraseñas")
         self.root.geometry("900x500")
         # Aquí puedes agregar widgets y configuraciones de la interfaz gráfica
         
@@ -48,8 +48,9 @@ class AppGUI:
         right_container.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Etiqueta y entrada para ingresar la contraseña
-        self.etiqueta_contraseña = tk.Label(right_container, text="Ingresa la contraseña:")
+        self.etiqueta_contraseña = tk.Label(right_container, text="Ingresa la contraseña:", bg="white")
         self.etiqueta_contraseña.grid(row=0, column=0, pady=10)
+        
 
         self.entrada_contraseña = tk.Entry(right_container, show="*")
         self.entrada_contraseña.grid(row=1, column=0, pady=10)
@@ -58,10 +59,13 @@ class AppGUI:
         self.boton_evaluar = tk.Button(right_container, text="Evaluar Contraseña", command=self.evaluar_contrasena)
         self.boton_evaluar.grid(row=2, column=0, pady=10)
 
-        # Widget de texto para mostrar el resultado
+         # Widget de texto para mostrar el resultado
         self.resultado_texto = tk.Text(right_container, height=4, width=50)
         self.resultado_texto.grid(row=3, column=0, pady=10)
-        self.resultado_texto.config(state=tk.DISABLED) 
+        self.resultado_texto.config(state=tk.DISABLED)
+        
+        # Vincular evento de cierre de ventana
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
     def evaluar_contrasena(self):
         contrasena_prueba = self.entrada_contraseña.get()
         # Tokenización de la contraseña de prueba
@@ -76,12 +80,30 @@ class AppGUI:
 
         # Obtener la probabilidad de cada clase
         probabilidades = prediccion[0]
-        # Mostrar el resultado en el widget de texto
-        resultado = f"Clasificación numérica de la contraseña: {clasificacion_numerica[0]}\nProbabilidades de cada clase (Débil, Segura, Bastante Segura): {probabilidades}\n"
+        
+        # Seleccionar la clase predicha con mayor probabilidad
+        clase_predicha = np.argmax(probabilidades)
+    
+        # Mostrar el resultado de manera interactiva
+        if clase_predicha == 0:
+            resultado = "¡Esta contraseña es débil! ¡Necesitas una contraseña más segura!"
+        elif clase_predicha == 1:
+            resultado = "¡Buena elección! ¡Esta contraseña es segura!"
+        else:
+            resultado = "¡Excelente! ¡Esta contraseña es bastante segura!"
+
+        # Agregar la confianza del modelo al mensaje
+        resultado += f"\nResultado con una confianza del {probabilidades[clase_predicha] * 100:.2f}%"
+
         self.resultado_texto.config(state=tk.NORMAL)  # Habilitar la edición del widget de texto
         self.resultado_texto.delete(1.0, tk.END)  # Limpiar el contenido anterior
         self.resultado_texto.insert(tk.END, resultado)
         self.resultado_texto.config(state=tk.DISABLED)  # Deshabilitar la edición del widget de texto
 
+
+    def on_closing(self):
+        # Puedes agregar limpieza adicional aquí si es necesario
+        self.root.quit()
+        
     def run(self):
         self.root.mainloop()
